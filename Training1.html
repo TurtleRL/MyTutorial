@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+		crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+		integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+		crossorigin=""></script>
+    
+    
+<style>  
+      #autocomplete {
+        z-index: 100;
+        margin-bottom: 5px;
+		width: 255px
+      }
+      #map {
+        width: 99vw;
+		height: 95vh;
+		margin: 0;
+		padding: 1;
+		top: 0;
+		left: 0;
+		z-index: 0;
+      }
+</style>
+</head>
+
+<body>
+	<p>hello world</p>
+	<div id="map"></div>
+	<script>//We created 5 map points and some circles on the the map using Leaflet tutorial.  Then we created points and inverted the coordinates to center on santa barbara county.
+		var mapcenter = [34.63525592703116,-120.48628807067871];//lat & long is inverted. Below we flipped lat/long for santa barbara county
+		var zoomlevel = 13;
+		var mymap = L.map('map').setView(mapcenter, zoomlevel);
+		var mypoints = {
+					"type": "FeatureCollection",
+					"name": "Toy Points",
+					"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+					"features": [
+					{ "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -120.449981689453125, 34.659051572911373 ] } },//lat/long we inverted
+					{ "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -120.465228486099761, 34.649191196756533 ] } },
+					{ "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -120.464515221764373, 34.659822231850612 ] } },
+					{ "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -120.465703995656682, 34.631936992833872 ] } },
+					{ "type": "Feature", "properties": { }, "geometry": { "type": "Point", "coordinates": [ -120.483535604041322, 34.66219977963523 ] } }
+					]
+					};
+		var i = 0;
+		var mp = createPoints(mypoints);//variable in the map creating point
+		for(e in mp){createcircle(mp[e]).addTo(mymap)};//loops through different variables
+		L.geoJSON(mypoints).addTo(mymap);
+		function createPoints(data){
+			var pointC = [];
+			for( e in data["features"]){
+				console.log(e);
+				console.log(data["features"][e]["geometry"]["coordinates"]);
+				pointC.push( data["features"][e]["geometry"]["coordinates"]);
+				console.log(pointC);
+				
+			};
+			
+			return pointC;
+		};
+		
+		function createcircle(data){
+			console.log(data);
+			return L.circle([data[1],data[0]],{//
+					color: 'red',
+					fillColor: '#f03',
+					fillOpacity: 0.5,
+					radius: 500
+					});
+		};
+
+		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+				'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+			id: 'mapbox/streets-v11',
+			tileSize: 512,
+			zoomOffset: -1
+		}).addTo(mymap);
+
+	</script>
+</body>
+</html>
