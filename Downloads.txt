@@ -1,0 +1,2 @@
+https://notepad-plus-plus.org/downloads/
+https://qgis.org/downloads/QGIS-OSGeo4W-3.16.11-1.msi
